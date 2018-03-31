@@ -1,5 +1,5 @@
 {
-	"name": "DisplayTitle",
+	"name": "DisplayTitle mod",
 	"version": "2.0.0",
 	"author": [
 		"[https://www.mediawiki.org/wiki/User:Cindy.cicalese Cindy Cicalese]",
@@ -9,9 +9,6 @@
 	"descriptionmsg": "displaytitle-desc",
 	"type": "parserhook",
 	"license-name": "MIT",
-	"requires": {
-		"MediaWiki": ">= 1.29.0"
-	},
 	"MessagesDirs": {
 		"DisplayTitle": [
 			"i18n"
@@ -31,7 +28,8 @@
 		"PersonalUrls": "DisplayTitleHooks::onPersonalUrls",
 		"HtmlPageLinkRendererBegin": "DisplayTitleHooks::onHtmlPageLinkRendererBegin",
 		"ScribuntoExternalLibraries": "DisplayTitleHooks::onScribuntoExternalLibraries",
-		"SelfLinkBegin": "DisplayTitleHooks::onSelfLinkBegin"
+		"SelfLinkBegin": "DisplayTitleHooks::onSelfLinkBegin",
+		"OutputPageMakeCategoryLinks": "DisplayTitleHooks::onOutputPageMakeCategoryLinks"
 	},
 	"config": {
 		"DisplayTitleHideSubtitle": {

@@ -2,6 +2,7 @@
 
 use MediaWiki\Linker\LinkRenderer;
 use MediaWiki\Linker\LinkTarget;
+use MediaWiki\MediaWikiServices;
 
 class DisplayTitleHooks {
 
@@ -92,6 +93,49 @@ class DisplayTitleHooks {
 		self::handleLink( $nt, $html, false );
 	}
 
+	 /**
+	 * Implements OutputPageMakeCategoryLinks hook.
+	 * See https://www.mediawiki.org/wiki/Manual:Hooks/OutputPageMakeCategoryLinks
+	 * Handle links for the page's categories.
+	 *
+	 * @since 2.0
+	 * @param OutputPage &$out the OutputPage object
+	 * @param array $categories keys are category names, values are category types ("normal" or "hidden")
+	 * @param array &$links holds the result. Must be an associative array with category types as keys and arrays of HTML links as values.
+	 */
+	public static function onOutputPageMakeCategoryLinks( OutputPage &$out, $categories,
+		&$links ) {
+		$linkRenderer = MediaWikiServices::getInstance()->getLinkRenderer();
+		foreach ( $categories as $category => $type ) {
+			// array keys will cast numeric category names to ints, so cast back to string
+			$category = (string)$category;
+			$origcategory = $category;
+			$title = Title::makeTitleSafe( NS_CATEGORY, $category );
+			if ( !$title ) {
+				continue;
+			}
+			//$wgContLang->findVariantLink( $category, $title, true );
+			if ( $category != $origcategory && array_key_exists( $category, $categories ) ) {
+				continue;
+			}
+			//$text = $wgContLang->convertHtml( $title->getText() );
+			//$out->mCategories[$type][] = $title->getText();
+			$found = self::getDisplayTitle( $title, $displaytitle );
+			if ( $found ) {
+				// remove category prefix if present
+				$prefix = 'Category:';
+				if (substr($displaytitle, 0, strlen($prefix)) == $prefix) {
+					$displaytitle = substr($displaytitle, strlen($prefix));
+				}
+			} else {
+				$displaytitle = $title->getText();
+			}
+			$links[$type][] = $linkRenderer->makeLink( $title, new HtmlArmor( $displaytitle ) );
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Helper function. Determines link text for self-links and standard links.
 	 *
