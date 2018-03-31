@@ -73,6 +73,9 @@ class DisplayTitleHooks {
 		LinkRenderer $linkRenderer, LinkTarget $target, &$text, &$extraAttribs,
 		&$query, &$ret ) {
 		$title = Title::newFromLinkTarget( $target );
+		if ( $title->getNsText() === 'Plugin' ) {
+			return;
+		}
 		self::handleLink( $title, $text, true );
 	}
 
@@ -90,6 +93,9 @@ class DisplayTitleHooks {
 	 */
 	public static function onSelfLinkBegin( Title $nt, &$html, &$trail,
 		&$prefix, &$ret ) {
+		if ( $nt->getNsText() === 'Plugin' ) {
+			return;
+		}
 		self::handleLink( $nt, $html, false );
 	}
 
