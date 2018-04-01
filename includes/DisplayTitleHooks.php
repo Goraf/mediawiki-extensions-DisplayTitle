@@ -175,7 +175,7 @@ class DisplayTitleHooks {
 						}
 					} else {
 						if ( $title->getText() === $target->getText() &&
-							$title->getSubjectNsText() === $target->getSubjectNsText() ) {
+							( $title->getSubjectNsText() === $target->getSubjectNsText() || $target->inNamespace( NS_CATEGORY ) ) ) {
 							self::getDisplayTitle( $target, $html, $wrap );
 						}
 					}
